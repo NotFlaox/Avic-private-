@@ -1,0 +1,178 @@
+--[[ 
+    🛡️ AVIC PRIVATE - ENCRYPTED EDITION
+    Protection: Obfuscated logic
+    Version: 3.9.8
+]]--
+
+local _0x_v1 = "AvicKeyMobile.txt"
+local _0x_v2 = "Avic123"
+local _0x_v3 = false
+
+if isfile and isfile(_0x_v1) then
+    if readfile(_0x_v1) == _0x_v2 then
+        _0x_v3 = true
+    end
+end
+
+local _0x_lib = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+local _0x_p = game.Players.LocalPlayer
+local _0x_t = tick()
+
+_G.AutoFarm = false
+_G.AutoMoney = false
+_G.SelectedBlocks = {}
+
+local _0x_pos = _0x_p.Character and _0x_p.Character.HumanoidRootPart.Position or Vector3.new(0,50,0)
+local _0x_busy = false
+
+local _0x_win = _0x_lib:CreateWindow({
+    Name = "🛡️ AVIC PRIVATE | V.3.9.8",
+    LoadingTitle = "AVIC PRIVATE SYSTEM",
+    LoadingSubtitle = "By Avic",
+    ConfigurationSaving = {Enabled = false},
+    KeySystem = not _0x_v3,
+    KeySettings = {
+        Title = "AVIC PRIVATE ACCESS",
+        Subtitle = "Clé : " .. _0x_v2,
+        Note = "La clé sera enregistrée sur votre mobile.",
+        FileName = "AvicKey",
+        SaveKey = true,
+        Key = {_0x_v2}
+    }
+})
+
+if not _0x_v3 then
+    task.spawn(function()
+        repeat task.wait(1) until _0x_lib.Flags == nil or not _0x_v3
+        if writefile then pcall(function() writefile(_0x_v1, _0x_v2) end) end
+    end)
+end
+
+local function _0x_func1(_0x_arg1)
+    local _0x_char = _0x_p.Character
+    if not _0x_char or not _0x_char:FindFirstChild("Humanoid") then return end
+    if _0x_arg1 then
+        local _0x_tool = _0x_p.Backpack:FindFirstChild("Bat") or _0x_p.Backpack:FindFirstChildOfClass("Tool")
+        if _0x_tool then _0x_char.Humanoid:EquipTool(_0x_tool) end
+    else
+        _0x_char.Humanoid:UnequipTools()
+    end
+end
+
+local function _0x_func2()
+    local _0x_plots = workspace:FindFirstChild("Plots")
+    if _0x_plots then
+        for _,_0x_item in pairs(_0x_plots:GetChildren()) do
+            local _0x_pads = _0x_item:FindFirstChild("CollectPads")
+            if _0x_pads then
+                for _,_0x_pad in pairs(_0x_pads:GetChildren()) do
+                    local _0x_top = _0x_pad:FindFirstChild("Top")
+                    if _0x_top and _0x_top:IsA("BasePart") then
+                        local _0x_check = false
+                        for _,_0x_desc in pairs(_0x_pad:GetDescendants()) do
+                            if _0x_desc:IsA("TextLabel") and (_0x_desc.Text:find("Upgrade") or _0x_desc.Text:find("Améliorer")) then
+                                _0x_check = true
+                                break
+                            end
+                        end
+                        if not _0x_check then
+                            firetouchinterest(_0x_p.Character.HumanoidRootPart,_0x_top,0)
+                            firetouchinterest(_0x_p.Character.HumanoidRootPart,_0x_top,1)
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
+local MainTab = _0x_win:CreateTab("💎 Main", 4483345998)
+local BlockTab = _0x_win:CreateTab("🧱 Blocs", 4483345998)
+local StatusTab = _0x_win:CreateTab("📊 Status", 4483345998)
+local InfoTab = _0x_win:CreateTab("ℹ️ Info", 4483345998)
+
+MainTab:CreateSection("💰 Farming")
+
+MainTab:CreateToggle({
+    Name = "Auto Récolte (Sans Popups)",
+    CurrentValue = false,
+    Callback = function(v)
+        _G.AutoMoney = v
+        task.spawn(function()
+            while _G.AutoMoney do _0x_func2() task.wait(0.5) end
+        end)
+    end
+})
+
+MainTab:CreateToggle({
+    Name = "Lancer l'Auto-Farm V.9",
+    CurrentValue = false,
+    Callback = function(v)
+        _G.AutoFarm = v
+        task.spawn(function()
+            while _G.AutoFarm do
+                local _0x_lv = workspace:FindFirstChild("Live") and workspace.Live:FindFirstChild("Friends")
+                local _0x_hrp = _0x_p.Character and _0x_p.Character:FindFirstChild("HumanoidRootPart")
+                if _0x_lv and _0x_hrp and not _0x_busy then
+                    local _0x_tgt = nil
+                    for _,_0x_b in pairs(_0x_lv:GetChildren()) do
+                        for _,_0x_s in pairs(_G.SelectedBlocks) do
+                            if _0x_b.Name == _0x_s and _0x_b.PrimaryPart then _0x_tgt = _0x_b break end
+                        end
+                        if _0x_tgt then break end
+                    end
+                    if _0x_tgt then
+                        _0x_func1(false)
+                        _0x_hrp.CFrame = _0x_tgt.PrimaryPart.CFrame * CFrame.new(0,1.5,0)
+                        _0x_busy = true
+                        local _0x_pr = _0x_tgt:FindFirstChildWhichIsA("ProximityPrompt", true)
+                        if _0x_pr then
+                            _0x_pr.RequiresLineOfSight = false
+                            local _0x_tk = tick()
+                            while tick() - _0x_tk < 2.2 and _G.AutoFarm do
+                                _0x_pr:InputHoldBegin()
+                                task.wait(0.2)
+                            end
+                            _0x_pr:InputHoldEnd()
+                        end
+                        _0x_hrp.CFrame = CFrame.new(_0x_pos)
+                        task.wait(0.2)
+                        _0x_func1(true)
+                        _0x_busy = false
+                        task.wait(5)
+                        _0x_func1(false)
+                    end
+                end
+                task.wait(0.5)
+            end
+        end)
+    end
+})
+
+BlockTab:CreateSection("📦 Sélection des blocs")
+local _0x_list = {"Common Lucky Block", "Rare Lucky Block", "Epic Lucky Block", "Legendary Lucky Block", "Mythic Lucky Block", "Secret Lucky Block", "Brainrot God Lucky Block", "Divine Lucky Block", "Exclusive Lucky Block", "OG Lucky Block", "Lava Lucky Block", "Ghost Lucky Block", "Galaxy Lucky Block", "Hacker Lucky Block"}
+
+BlockTab:CreateDropdown({
+    Name = "Choisir les Blocs",
+    Options = _0x_list,
+    CurrentOption = {},
+    MultipleOptions = true,
+    Callback = function(v) _G.SelectedBlocks = v end
+})
+
+StatusTab:CreateSection("📊 État en temps réel")
+local L1 = StatusTab:CreateLabel("Auto-Farm : ❌")
+local L2 = StatusTab:CreateLabel("Auto Récolte : ❌")
+local L3 = StatusTab:CreateLabel("Blocs sélectionnés : 0")
+
+task.spawn(function()
+    while task.wait(0.5) do
+        L1:Set("Auto-Farm : "..(_G.AutoFarm and "🟢 ON" or "🔴 OFF"))
+        L2:Set("Auto Récolte : "..(_G.AutoMoney and "🟢 ON" or "🔴 OFF"))
+        L3:Set("Blocs sélectionnés : "..tostring(#_G.SelectedBlocks))
+    end
+end)
+
+InfoTab:CreateParagraph({Title = "🛡️ AVIC PRIVATE", Content = "Version : 3.9.8\nAuto-Farm : V.9\nUI : Rayfield Enhanced\n\nBy Avic"})
+
+_0x_lib:Notify({Title = "PROTECTED LOAD", Content = "Avic Private chargé avec protection.", Duration = 5})
