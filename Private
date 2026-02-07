@@ -150,7 +150,13 @@ MainTab:CreateToggle({
 })
 
 BlockTab:CreateSection("📦 Sélection des blocs")
-local _0x_list = {"Common Lucky Block", "Rare Lucky Block", "Epic Lucky Block", "Legendary Lucky Block", "Mythic Lucky Block", "Secret Lucky Block", "Brainrot God Lucky Block", "Divine Lucky Block", "Exclusive Lucky Block", "OG Lucky Block", "Lava Lucky Block", "Ghost Lucky Block", "Galaxy Lucky Block", "Hacker Lucky Block"}
+-- Liste mise à jour avec Craby et Cyber
+local _0x_list = {
+    "Common Lucky Block", "Rare Lucky Block", "Epic Lucky Block", "Legendary Lucky Block", 
+    "Mythic Lucky Block", "Secret Lucky Block", "Brainrot God Lucky Block", "Divine Lucky Block", 
+    "Exclusive Lucky Block", "OG Lucky Block", "Lava Lucky Block", "Ghost Lucky Block", 
+    "Galaxy Lucky Block", "Hacker Lucky Block", "Craby Lucky Block", "Cyber Lucky Block"
+}
 
 BlockTab:CreateDropdown({
     Name = "Choisir les Blocs",
