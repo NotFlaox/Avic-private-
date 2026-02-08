@@ -1,7 +1,7 @@
 --[[ 
     🛡️ AVIC PRIVATE - ENCRYPTED EDITION
     Protection: Obfuscated logic
-    Version: 3.9.8
+    Version: 3.9.8 (Clean Priority Update)
 ]]--
 
 local _0x_v1 = "AvicKeyMobile.txt"
@@ -16,11 +16,11 @@ end
 
 local _0x_lib = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local _0x_p = game.Players.LocalPlayer
-local _0x_t = tick()
 
 _G.AutoFarm = false
 _G.AutoMoney = false
-_G.SelectedBlocks = {}
+_G.PriorityBlocks = {}
+_G.NormalBlocks = {}
 
 local _0x_pos = _0x_p.Character and _0x_p.Character.HumanoidRootPart.Position or Vector3.new(0,50,0)
 local _0x_busy = false
@@ -40,13 +40,6 @@ local _0x_win = _0x_lib:CreateWindow({
         Key = {_0x_v2}
     }
 })
-
-if not _0x_v3 then
-    task.spawn(function()
-        repeat task.wait(1) until _0x_lib.Flags == nil or not _0x_v3
-        if writefile then pcall(function() writefile(_0x_v1, _0x_v2) end) end
-    end)
-end
 
 local function _0x_func1(_0x_arg1)
     local _0x_char = _0x_p.Character
@@ -68,17 +61,8 @@ local function _0x_func2()
                 for _,_0x_pad in pairs(_0x_pads:GetChildren()) do
                     local _0x_top = _0x_pad:FindFirstChild("Top")
                     if _0x_top and _0x_top:IsA("BasePart") then
-                        local _0x_check = false
-                        for _,_0x_desc in pairs(_0x_pad:GetDescendants()) do
-                            if _0x_desc:IsA("TextLabel") and (_0x_desc.Text:find("Upgrade") or _0x_desc.Text:find("Améliorer")) then
-                                _0x_check = true
-                                break
-                            end
-                        end
-                        if not _0x_check then
-                            firetouchinterest(_0x_p.Character.HumanoidRootPart,_0x_top,0)
-                            firetouchinterest(_0x_p.Character.HumanoidRootPart,_0x_top,1)
-                        end
+                        firetouchinterest(_0x_p.Character.HumanoidRootPart,_0x_top,0)
+                        firetouchinterest(_0x_p.Character.HumanoidRootPart,_0x_top,1)
                     end
                 end
             end
@@ -88,13 +72,12 @@ end
 
 local MainTab = _0x_win:CreateTab("💎 Main", 4483345998)
 local BlockTab = _0x_win:CreateTab("🧱 Blocs", 4483345998)
-local StatusTab = _0x_win:CreateTab("📊 Status", 4483345998)
 local InfoTab = _0x_win:CreateTab("ℹ️ Info", 4483345998)
 
 MainTab:CreateSection("💰 Farming")
 
 MainTab:CreateToggle({
-    Name = "Auto Récolte (Sans Popups)",
+    Name = "Auto Récolte",
     CurrentValue = false,
     Callback = function(v)
         _G.AutoMoney = v
@@ -115,12 +98,29 @@ MainTab:CreateToggle({
                 local _0x_hrp = _0x_p.Character and _0x_p.Character:FindFirstChild("HumanoidRootPart")
                 if _0x_lv and _0x_hrp and not _0x_busy then
                     local _0x_tgt = nil
-                    for _,_0x_b in pairs(_0x_lv:GetChildren()) do
-                        for _,_0x_s in pairs(_G.SelectedBlocks) do
-                            if _0x_b.Name == _0x_s and _0x_b.PrimaryPart then _0x_tgt = _0x_b break end
+                    
+                    -- ÉTAPE 1 : Scanner les PRIORITÉS
+                    for _,_0x_s in pairs(_G.PriorityBlocks) do
+                        for _,_0x_b in pairs(_0x_lv:GetChildren()) do
+                            if _0x_b.Name == _0x_s and _0x_b.PrimaryPart then 
+                                _0x_tgt = _0x_b break 
+                            end
                         end
                         if _0x_tgt then break end
                     end
+                    
+                    -- ÉTAPE 2 : Scanner le NORMAL (seulement si rien en priorité)
+                    if not _0x_tgt then
+                        for _,_0x_s in pairs(_G.NormalBlocks) do
+                            for _,_0x_b in pairs(_0x_lv:GetChildren()) do
+                                if _0x_b.Name == _0x_s and _0x_b.PrimaryPart then 
+                                    _0x_tgt = _0x_b break 
+                                end
+                            end
+                            if _0x_tgt then break end
+                        end
+                    end
+                    
                     if _0x_tgt then
                         _0x_func1(false)
                         _0x_hrp.CFrame = _0x_tgt.PrimaryPart.CFrame * CFrame.new(0,1.5,0)
@@ -149,36 +149,40 @@ MainTab:CreateToggle({
     end
 })
 
-BlockTab:CreateSection("📦 Sélection des blocs")
--- Liste mise à jour avec Craby et Cyber
-local _0x_list = {
-    "Common Lucky Block", "Rare Lucky Block", "Epic Lucky Block", "Legendary Lucky Block", 
-    "Mythic Lucky Block", "Secret Lucky Block", "Brainrot God Lucky Block", "Divine Lucky Block", 
-    "Exclusive Lucky Block", "OG Lucky Block", "Lava Lucky Block", "Ghost Lucky Block", 
-    "Galaxy Lucky Block", "Hacker Lucky Block", "Craby Lucky Block", "Cyber Lucky Block"
+-- LISTE COMPLÈTE (Utilisée pour les deux catégories)
+local _0x_full_list = {
+    "Common Lucky Block", "Lava Common Lucky Block",
+    "Rare Lucky Block", "Lava Rare Lucky Block",
+    "Epic Lucky Block", "Lava Epic Lucky Block",
+    "Legendary Lucky Block", "Lava Legendary Lucky Block",
+    "Mythic Lucky Block", "Lava Mythic Lucky Block",
+    "Secret Lucky Block", "Lava Secret Lucky Block",
+    "Brainrot God Lucky Block", "Lava Brainrot God Lucky Block",
+    "Divine Lucky Block", "Lava Divine Lucky Block",
+    "Exclusive Lucky Block", "Lava Exclusive Lucky Block",
+    "OG Lucky Block", "Lava OG Lucky Block",
+    "Lava Lucky Block", "Ghost Lucky Block", "Galaxy Lucky Block", "Hacker Lucky Block", 
+    "Crab Lucky Block", "Cyber Lucky Block"
 }
 
+BlockTab:CreateSection("⭐ PRIORITÉ")
 BlockTab:CreateDropdown({
-    Name = "Choisir les Blocs",
-    Options = _0x_list,
+    Name = "Cherché en PREMIER",
+    Options = _0x_full_list,
     CurrentOption = {},
     MultipleOptions = true,
-    Callback = function(v) _G.SelectedBlocks = v end
+    Callback = function(v) _G.PriorityBlocks = v end
 })
 
-StatusTab:CreateSection("📊 État en temps réel")
-local L1 = StatusTab:CreateLabel("Auto-Farm : ❌")
-local L2 = StatusTab:CreateLabel("Auto Récolte : ❌")
-local L3 = StatusTab:CreateLabel("Blocs sélectionnés : 0")
+BlockTab:CreateSection("📦 NORMAL")
+BlockTab:CreateDropdown({
+    Name = "Cherché ensuite",
+    Options = _0x_full_list,
+    CurrentOption = {},
+    MultipleOptions = true,
+    Callback = function(v) _G.NormalBlocks = v end
+})
 
-task.spawn(function()
-    while task.wait(0.5) do
-        L1:Set("Auto-Farm : "..(_G.AutoFarm and "🟢 ON" or "🔴 OFF"))
-        L2:Set("Auto Récolte : "..(_G.AutoMoney and "🟢 ON" or "🔴 OFF"))
-        L3:Set("Blocs sélectionnés : "..tostring(#_G.SelectedBlocks))
-    end
-end)
+InfoTab:CreateParagraph({Title = "🛡️ AVIC PRIVATE", Content = "Version : 3.9.8\nPriority System Updated\nAll Blocks available in both lists."})
 
-InfoTab:CreateParagraph({Title = "🛡️ AVIC PRIVATE", Content = "Version : 3.9.8\nAuto-Farm : V.9\nUI : Rayfield Enhanced\n\nBy Avic"})
-
-_0x_lib:Notify({Title = "PROTECTED LOAD", Content = "Avic Private chargé avec protection.", Duration = 5})
+_0x_lib:Notify({Title = "SYSTEM UPDATED", Content = "Listes synchronisées.", Duration = 5})
