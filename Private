@@ -1,7 +1,7 @@
 --[[ 
     🛡️ AVIC PRIVATE - ENCRYPTED EDITION
     Protection: Obfuscated logic
-    Version: 3.9.8 (Clean Priority Update)
+    Version: 3.9.8 (Mega Variants Update)
 ]]--
 
 local _0x_v1 = "AvicKeyMobile.txt"
@@ -16,6 +16,14 @@ end
 
 local _0x_lib = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local _0x_p = game.Players.LocalPlayer
+local _0x_vu = game:GetService("VirtualUser")
+
+-- ANTI-AFK SYSTEM
+_0x_p.Idled:Connect(function()
+    _0x_vu:Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+    task.wait(1)
+    _0x_vu:Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+end)
 
 _G.AutoFarm = false
 _G.AutoMoney = false
@@ -56,13 +64,16 @@ local function _0x_func2()
     local _0x_plots = workspace:FindFirstChild("Plots")
     if _0x_plots then
         for _,_0x_item in pairs(_0x_plots:GetChildren()) do
-            local _0x_pads = _0x_item:FindFirstChild("CollectPads")
-            if _0x_pads then
-                for _,_0x_pad in pairs(_0x_pads:GetChildren()) do
-                    local _0x_top = _0x_pad:FindFirstChild("Top")
-                    if _0x_top and _0x_top:IsA("BasePart") then
-                        firetouchinterest(_0x_p.Character.HumanoidRootPart,_0x_top,0)
-                        firetouchinterest(_0x_p.Character.HumanoidRootPart,_0x_top,1)
+            local _0x_owner = _0x_item:FindFirstChild("Owner")
+            if _0x_owner and _0x_owner.Value == _0x_p.Name then
+                local _0x_pads = _0x_item:FindFirstChild("CollectPads")
+                if _0x_pads then
+                    for _,_0x_pad in pairs(_0x_pads:GetChildren()) do
+                        local _0x_top = _0x_pad:FindFirstChild("Top")
+                        if _0x_top and _0x_top:IsA("BasePart") then
+                            firetouchinterest(_0x_p.Character.HumanoidRootPart,_0x_top,0)
+                            firetouchinterest(_0x_p.Character.HumanoidRootPart,_0x_top,1)
+                        end
                     end
                 end
             end
@@ -99,7 +110,6 @@ MainTab:CreateToggle({
                 if _0x_lv and _0x_hrp and not _0x_busy then
                     local _0x_tgt = nil
                     
-                    -- ÉTAPE 1 : Scanner les PRIORITÉS
                     for _,_0x_s in pairs(_G.PriorityBlocks) do
                         for _,_0x_b in pairs(_0x_lv:GetChildren()) do
                             if _0x_b.Name == _0x_s and _0x_b.PrimaryPart then 
@@ -109,7 +119,6 @@ MainTab:CreateToggle({
                         if _0x_tgt then break end
                     end
                     
-                    -- ÉTAPE 2 : Scanner le NORMAL (seulement si rien en priorité)
                     if not _0x_tgt then
                         for _,_0x_s in pairs(_G.NormalBlocks) do
                             for _,_0x_b in pairs(_0x_lv:GetChildren()) do
@@ -149,21 +158,24 @@ MainTab:CreateToggle({
     end
 })
 
--- LISTE COMPLÈTE (Utilisée pour les deux catégories)
-local _0x_full_list = {
-    "Common Lucky Block", "Lava Common Lucky Block",
-    "Rare Lucky Block", "Lava Rare Lucky Block",
-    "Epic Lucky Block", "Lava Epic Lucky Block",
-    "Legendary Lucky Block", "Lava Legendary Lucky Block",
-    "Mythic Lucky Block", "Lava Mythic Lucky Block",
-    "Secret Lucky Block", "Lava Secret Lucky Block",
-    "Brainrot God Lucky Block", "Lava Brainrot God Lucky Block",
-    "Divine Lucky Block", "Lava Divine Lucky Block",
-    "Exclusive Lucky Block", "Lava Exclusive Lucky Block",
-    "OG Lucky Block", "Lava OG Lucky Block",
-    "Lava Lucky Block", "Ghost Lucky Block", "Galaxy Lucky Block", "Hacker Lucky Block", 
-    "Crab Lucky Block", "Cyber Lucky Block"
+-- GÉNÉRATION DE LA LISTE COMPLÈTE AVEC TOUTES LES VARIANTES
+local _0x_base_names = {
+    "Common Lucky Block", "Rare Lucky Block", "Epic Lucky Block", "Legendary Lucky Block",
+    "Mythic Lucky Block", "Secret Lucky Block", "Brainrot God Lucky Block", "Divine Lucky Block",
+    "Exclusive Lucky Block", "OG Lucky Block"
 }
+
+local _0x_full_list = {}
+for _, name in pairs(_0x_base_names) do
+    table.insert(_0x_full_list, name)
+    table.insert(_0x_full_list, "Lava " .. name)
+    table.insert(_0x_full_list, "Taco " .. name)
+    table.insert(_0x_full_list, "Hacker " .. name)
+end
+
+-- Ajout des blocs spéciaux sans variantes automatiques
+local _0x_special = {"Ghost Lucky Block", "Galaxy Lucky Block", "Crab Lucky Block", "Cyber Lucky Block"}
+for _, s in pairs(_0x_special) do table.insert(_0x_full_list, s) end
 
 BlockTab:CreateSection("⭐ PRIORITÉ")
 BlockTab:CreateDropdown({
@@ -183,6 +195,6 @@ BlockTab:CreateDropdown({
     Callback = function(v) _G.NormalBlocks = v end
 })
 
-InfoTab:CreateParagraph({Title = "🛡️ AVIC PRIVATE", Content = "Version : 3.9.8\nPriority System Updated\nAll Blocks available in both lists."})
+InfoTab:CreateParagraph({Title = "🛡️ AVIC PRIVATE", Content = "Version : 3.9.8\nVariantes: Lava, Taco, Hacker added for all rarities."})
 
-_0x_lib:Notify({Title = "SYSTEM UPDATED", Content = "Listes synchronisées.", Duration = 5})
+_0x_lib:Notify({Title = "LIST UPDATED", Content = "Toutes les variantes Taco & Hacker sont prêtes.", Duration = 5})
