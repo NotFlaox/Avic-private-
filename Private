@@ -1,7 +1,7 @@
 --[[ 
     🛡️ AVIC PRIVATE - ENCRYPTED EDITION
     Protection: Obfuscated logic
-    Version: 3.9.8 (Mega Variants Update)
+    Version: 4.0.0 (FULL Restoration)
 ]]--
 
 local _0x_v1 = "AvicKeyMobile.txt"
@@ -30,18 +30,17 @@ _G.AutoMoney = false
 _G.PriorityBlocks = {}
 _G.NormalBlocks = {}
 
-local _0x_pos = _0x_p.Character and _0x_p.Character.HumanoidRootPart.Position or Vector3.new(0,50,0)
 local _0x_busy = false
 
 local _0x_win = _0x_lib:CreateWindow({
-    Name = "🛡️ AVIC PRIVATE | V.3.9.8",
+    Name = "🛡️ AVIC PRIVATE | V.4.0.0",
     LoadingTitle = "AVIC PRIVATE SYSTEM",
     LoadingSubtitle = "By Avic",
     ConfigurationSaving = {Enabled = false},
     KeySystem = not _0x_v3,
     KeySettings = {
         Title = "AVIC PRIVATE ACCESS",
-        Subtitle = "Clé : " .. _0x_v2,
+        Subtitle = "Safe Return & Full Restored",
         Note = "La clé sera enregistrée sur votre mobile.",
         FileName = "AvicKey",
         SaveKey = true,
@@ -49,6 +48,7 @@ local _0x_win = _0x_lib:CreateWindow({
     }
 })
 
+-- FONCTION EQUIP/UNEQUIP
 local function _0x_func1(_0x_arg1)
     local _0x_char = _0x_p.Character
     if not _0x_char or not _0x_char:FindFirstChild("Humanoid") then return end
@@ -60,6 +60,7 @@ local function _0x_func1(_0x_arg1)
     end
 end
 
+-- FONCTION AUTO-RECOLTE (PADS)
 local function _0x_func2()
     local _0x_plots = workspace:FindFirstChild("Plots")
     if _0x_plots then
@@ -81,14 +82,16 @@ local function _0x_func2()
     end
 end
 
+-- TABS
 local MainTab = _0x_win:CreateTab("💎 Main", 4483345998)
 local BlockTab = _0x_win:CreateTab("🧱 Blocs", 4483345998)
+local StatusTab = _0x_win:CreateTab("📊 Status", 4483345998)
 local InfoTab = _0x_win:CreateTab("ℹ️ Info", 4483345998)
 
 MainTab:CreateSection("💰 Farming")
 
 MainTab:CreateToggle({
-    Name = "Auto Récolte",
+    Name = "Auto Récolte (Pads)",
     CurrentValue = false,
     Callback = function(v)
         _G.AutoMoney = v
@@ -99,72 +102,71 @@ MainTab:CreateToggle({
 })
 
 MainTab:CreateToggle({
-    Name = "Lancer l'Auto-Farm V.9",
+    Name = "Lancer l'Auto-Farm V.10",
     CurrentValue = false,
     Callback = function(v)
         _G.AutoFarm = v
         task.spawn(function()
             while _G.AutoFarm do
                 local _0x_lv = workspace:FindFirstChild("Live") and workspace.Live:FindFirstChild("Friends")
-                local _0x_hrp = _0x_p.Character and _0x_p.Character:FindFirstChild("HumanoidRootPart")
+                local _0x_char = _0x_p.Character
+                local _0x_hrp = _0x_char and _0x_char:FindFirstChild("HumanoidRootPart")
+                
                 if _0x_lv and _0x_hrp and not _0x_busy then
                     local _0x_tgt = nil
-                    
                     for _,_0x_s in pairs(_G.PriorityBlocks) do
                         for _,_0x_b in pairs(_0x_lv:GetChildren()) do
-                            if _0x_b.Name == _0x_s and _0x_b.PrimaryPart then 
-                                _0x_tgt = _0x_b break 
-                            end
+                            if _0x_b.Name == _0x_s and _0x_b.PrimaryPart then _0x_tgt = _0x_b break end
                         end
                         if _0x_tgt then break end
                     end
-                    
                     if not _0x_tgt then
                         for _,_0x_s in pairs(_G.NormalBlocks) do
                             for _,_0x_b in pairs(_0x_lv:GetChildren()) do
-                                if _0x_b.Name == _0x_s and _0x_b.PrimaryPart then 
-                                    _0x_tgt = _0x_b break 
-                                end
+                                if _0x_b.Name == _0x_s and _0x_b.PrimaryPart then _0x_tgt = _0x_b break end
                             end
                             if _0x_tgt then break end
                         end
                     end
                     
                     if _0x_tgt then
-                        _0x_func1(false)
-                        _0x_hrp.CFrame = _0x_tgt.PrimaryPart.CFrame * CFrame.new(0,1.5,0)
                         _0x_busy = true
+                        _0x_func1(false)
+                        local _0x_safe_base = _0x_hrp.CFrame
+
+                        for _, part in pairs(_0x_char:GetChildren()) do
+                            if part:IsA("BasePart") then part.CanCollide = false end
+                        end
+
+                        _0x_hrp.CFrame = _0x_tgt.PrimaryPart.CFrame * CFrame.new(0, 3, 0)
+                        task.wait(0.1)
+
                         local _0x_pr = _0x_tgt:FindFirstChildWhichIsA("ProximityPrompt", true)
                         if _0x_pr then
                             _0x_pr.RequiresLineOfSight = false
-                            local _0x_tk = tick()
-                            while tick() - _0x_tk < 2.2 and _G.AutoFarm do
-                                _0x_pr:InputHoldBegin()
-                                task.wait(0.2)
-                            end
+                            _0x_pr:InputHoldBegin()
+                            task.wait(0.9)
                             _0x_pr:InputHoldEnd()
                         end
-                        _0x_hrp.CFrame = CFrame.new(_0x_pos)
-                        task.wait(0.2)
-                        _0x_func1(true)
+
+                        _0x_hrp.CFrame = _0x_safe_base * CFrame.new(0, 3, 0)
+                        task.wait(0.1)
+                        for _, part in pairs(_0x_char:GetChildren()) do
+                            if part:IsA("BasePart") then part.CanCollide = true end
+                        end
+
                         _0x_busy = false
-                        task.wait(5)
-                        _0x_func1(false)
+                        task.wait(1.3)
                     end
                 end
-                task.wait(0.5)
+                task.wait(0.3)
             end
         end)
     end
 })
 
--- GÉNÉRATION DE LA LISTE COMPLÈTE AVEC TOUTES LES VARIANTES
-local _0x_base_names = {
-    "Common Lucky Block", "Rare Lucky Block", "Epic Lucky Block", "Legendary Lucky Block",
-    "Mythic Lucky Block", "Secret Lucky Block", "Brainrot God Lucky Block", "Divine Lucky Block",
-    "Exclusive Lucky Block", "OG Lucky Block"
-}
-
+-- LISTE COMPLÈTE
+local _0x_base_names = {"Common Lucky Block", "Rare Lucky Block", "Epic Lucky Block", "Legendary Lucky Block", "Mythic Lucky Block", "Secret Lucky Block", "Brainrot God Lucky Block", "Divine Lucky Block", "Exclusive Lucky Block", "OG Lucky Block"}
 local _0x_full_list = {}
 for _, name in pairs(_0x_base_names) do
     table.insert(_0x_full_list, name)
@@ -172,29 +174,29 @@ for _, name in pairs(_0x_base_names) do
     table.insert(_0x_full_list, "Taco " .. name)
     table.insert(_0x_full_list, "Hacker " .. name)
 end
-
--- Ajout des blocs spéciaux sans variantes automatiques
 local _0x_special = {"Ghost Lucky Block", "Galaxy Lucky Block", "Crab Lucky Block", "Cyber Lucky Block"}
 for _, s in pairs(_0x_special) do table.insert(_0x_full_list, s) end
 
 BlockTab:CreateSection("⭐ PRIORITÉ")
-BlockTab:CreateDropdown({
-    Name = "Cherché en PREMIER",
-    Options = _0x_full_list,
-    CurrentOption = {},
-    MultipleOptions = true,
-    Callback = function(v) _G.PriorityBlocks = v end
-})
+BlockTab:CreateDropdown({Name = "Cherché en PREMIER", Options = _0x_full_list, CurrentOption = {}, MultipleOptions = true, Callback = function(v) _G.PriorityBlocks = v end})
 
 BlockTab:CreateSection("📦 NORMAL")
-BlockTab:CreateDropdown({
-    Name = "Cherché ensuite",
-    Options = _0x_full_list,
-    CurrentOption = {},
-    MultipleOptions = true,
-    Callback = function(v) _G.NormalBlocks = v end
-})
+BlockTab:CreateDropdown({Name = "Cherché ensuite", Options = _0x_full_list, CurrentOption = {}, MultipleOptions = true, Callback = function(v) _G.NormalBlocks = v end})
 
-InfoTab:CreateParagraph({Title = "🛡️ AVIC PRIVATE", Content = "Version : 3.9.8\nVariantes: Lava, Taco, Hacker added for all rarities."})
+-- STATUS TAB RESTORED
+StatusTab:CreateSection("📊 État en temps réel")
+local L1 = StatusTab:CreateLabel("Auto-Farm : 🔴 OFF")
+local L2 = StatusTab:CreateLabel("Auto-Money : 🔴 OFF")
+local L3 = StatusTab:CreateLabel("Priorités : 0")
 
-_0x_lib:Notify({Title = "LIST UPDATED", Content = "Toutes les variantes Taco & Hacker sont prêtes.", Duration = 5})
+task.spawn(function()
+    while task.wait(0.5) do
+        L1:Set("Auto-Farm : "..(_G.AutoFarm and "🟢 ON" or "🔴 OFF"))
+        L2:Set("Auto-Money : "..(_G.AutoMoney and "🟢 ON" or "🔴 OFF"))
+        L3:Set("Priorités : "..tostring(#_G.PriorityBlocks))
+    end
+end)
+
+InfoTab:CreateParagraph({Title = "🛡️ AVIC PRIVATE", Content = "Version : 4.0.0\nSafe Return Patch\nLava/Taco/Hacker variants\nBy Avic"})
+
+_0x_lib:Notify({Title = "FULL LOADED", Content = "Script complet restauré et optimisé.", Duration = 5})
